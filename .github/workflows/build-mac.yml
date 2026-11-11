@@ -1,0 +1,40 @@
+name: Build macOS
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: macos-latest
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      APP: release/mac-universal/ParameterStoreManager.app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: yarn
+
+      - run: yarn --ignore-engines --frozen-lockfile
+
+      - run: yarn build
+
+      - run: yarn electron-builder build --mac dir --universal --publish never
+
+      # No Apple certificate: ad-hoc sign, otherwise Apple Silicon refuses to start the app
+      - run: codesign --force --deep -s - "$APP"
+
+      - run: codesign --verify --deep --strict "$APP"
+
+      - run: hdiutil create -volname ParameterStoreManager -srcfolder "$APP" -ov -format UDZO release/ParameterStoreManager-mac-universal.dmg
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ParameterStoreManager-mac-universal
+          path: release/ParameterStoreManager-mac-universal.dmg
+          if-no-files-found: error
