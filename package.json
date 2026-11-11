@@ -21,7 +21,7 @@
     "package-ci": "yarn postinstall && yarn build && electron-builder --publish always",
     "package-linux": "yarn build && electron-builder build --linux",
     "package-win": "yarn build && electron-builder build --win --x64",
-    "postinstall": "yarn flow-typed && electron-builder install-app-deps package.json && yarn build-dll && opencollective-postinstall",
+    "postinstall": "yarn flow-typed && electron-builder install-app-deps && yarn build-dll && opencollective-postinstall",
     "postlint-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.{*{js,jsx,json},babelrc,eslintrc,prettierrc,stylelintrc}'",
     "postlint-styles-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.{css,scss}'",
     "precommit": "lint-staged",
@@ -82,6 +82,12 @@
           "path": "/Applications"
         }
       ]
+    },
+    "mac": {
+      "target": {
+        "target": "default",
+        "arch": "universal"
+      }
     },
     "win": {
       "target": [
@@ -179,8 +185,8 @@
     "cross-spawn": "^6.0.5",
     "css-loader": "^2.1.1",
     "detect-port": "^1.3.0",
-    "electron": "^4.1.4",
-    "electron-builder": "^20.39.0",
+    "electron": "^11.5.0",
+    "electron-builder": "^22.14.13",
     "electron-devtools-installer": "^2.2.4",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",
@@ -208,7 +214,6 @@
     "jest": "^24.7.1",
     "lint-staged": "^8.1.5",
     "mini-css-extract-plugin": "^0.6.0",
-    "node-sass": "^4.11.0",
     "opencollective-postinstall": "^2.0.2",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "prettier": "^1.17.0",
@@ -216,9 +221,7 @@
     "react-test-renderer": "^16.8.6",
     "redux-logger": "^3.0.6",
     "rimraf": "^2.6.3",
-    "sass-loader": "^7.1.0",
     "sinon": "^7.3.2",
-    "spectron": "^5.0.0",
     "style-loader": "^0.23.1",
     "stylelint": "^10.0.1",
     "stylelint-config-prettier": "^5.1.0",
@@ -268,7 +271,7 @@
     "stringify-object": "^3.3.0"
   },
   "devEngines": {
-    "node": ">=7.x",
+    "node": "16.x",
     "npm": ">=4.x",
     "yarn": ">=0.21.3"
   },

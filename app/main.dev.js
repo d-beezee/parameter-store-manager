@@ -71,7 +71,12 @@ app.on('ready', async () => {
   mainWindow = new BrowserWindow({
     show: false,
     width: 1024,
-    height: 728
+    height: 728,
+    // Electron >= 5 turns these off by default; renderer needs node (aws-sdk, electron-store)
+    webPreferences: {
+      nodeIntegration: true,
+      enableRemoteModule: true
+    }
   });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
